@@ -57,6 +57,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ArduinoSTL/1.1.0</locationURI>
 		</link>
 		<link>
+			<name>libraries/EEPROM</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.3/libraries/EEPROM</locationURI>
+		</link>
+		<link>
 			<name>libraries/SD</name>
 			<type>2</type>
 			<location>C:/Users/mjk/Documents/Arduino/libraries/SD</location>

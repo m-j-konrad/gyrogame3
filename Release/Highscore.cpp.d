@@ -1,4 +1,4 @@
-gyrogame.cpp.o: ..\gyrogame.cpp ..\gyrogame.h \
+Highscore.cpp.o: ..\Highscore.cpp ..\Highscore.h \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Arduino.h \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/binary.h \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/WCharacter.h \
@@ -44,11 +44,13 @@ gyrogame.cpp.o: ..\gyrogame.cpp ..\gyrogame.h \
  D:\devel\Sloeber\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/iostream \
  D:\devel\Sloeber\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/string_iostream \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Stream.h \
+ D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\libraries\EEPROM\src/EEPROM.h \
  C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Print.h \
- C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/gfxfont.h
+ C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/gfxfont.h \
+ ..\gyrogame.h
 
-..\gyrogame.h:
+..\Highscore.h:
 
 D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Arduino.h:
 
@@ -140,8 +142,12 @@ D:\devel\Sloeber\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/string_iostream:
 
 D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Stream.h:
 
+D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\libraries\EEPROM\src/EEPROM.h:
+
 C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h:
 
 D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Print.h:
 
 C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/gfxfont.h:
+
+..\gyrogame.h:

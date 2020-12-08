@@ -34,8 +34,8 @@ CPP_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-core\core \
 . \
+core\core \
 libraries\Adafruit_BusIO \
 libraries\Adafruit_GFX_Library \
 libraries\ArduinoSTL\src \

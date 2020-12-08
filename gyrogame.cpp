@@ -50,8 +50,8 @@ unsigned short int Gamefield::getColor() {
 
 
 void Gamefield::draw() {
-	screen->fillRect(left, top, left + width, top + height, color);
-	screen->drawRect(left - 1, top - 1, left + width + 1, top + height + 1, borderColor);
+	screen->fillRect(left, top, width, height, color);
+	screen->drawRect(left - 1, top - 1, width + 2, height + 2, borderColor);
 
 };
 
@@ -72,10 +72,11 @@ void Player::init(short int x, short int y, unsigned short col) {
 	oldPos.x = x + 1;
 	oldPos.y = y + 1;
 	color = col;
+	width = 10;
 };
 
-void Player::setRadius(short int r) {
-	radius = r;
+void Player::setWidth(short int w) {
+	width = w;
 }
 
 
@@ -106,22 +107,24 @@ void Player::move() {
 	// move on x-axis
 	pos.x += speed.x;
 	// if out of borders, set position to border
-	if (pos.x < radius + gamefield->getLeft()) pos.x = radius + gamefield->getLeft();
-	if (pos.x > gamefield->getWidth() + gamefield->getLeft() - radius)
-		pos.x = gamefield->getWidth() + gamefield->getLeft() - radius;
+	if (pos.x < gamefield->getLeft()) pos.x = gamefield->getLeft();
+	if ((pos.x + width) >= (gamefield->getWidth() + gamefield->getLeft()))
+		pos.x = gamefield->getWidth() + gamefield->getLeft() - width - 1;
 	//move on y-axis
 	pos.y += speed.y;
 	// if out of borders, set position to border
-	if (pos.y < radius + gamefield->getTop()) pos.y = radius + gamefield->getTop();
-	if (pos.y > gamefield->getHeight() + gamefield->getTop() - radius)
-		pos.y = gamefield->getHeight() + gamefield->getTop() - radius;
+	if (pos.y < gamefield->getTop()) pos.y = gamefield->getTop();
+	if ((pos.y + width) >= (gamefield->getHeight() + gamefield->getTop()))
+		pos.y = gamefield->getHeight() + gamefield->getTop() - width - 1;
 };
 
 
 void Player::draw() {
 	if ((oldPos.x != pos.x) || (oldPos.y != pos.y)) {
-		screen->fillCircle(oldPos.x, oldPos.y, radius, gamefield->getColor());	// overdraw old position with background color
-		screen->fillCircle(pos.x, pos.y, radius, color);					// draw at new position
+		screen->fillCircle(oldPos.x + width / 2, oldPos.y + width / 2, width / 2, gamefield->getColor());	// overdraw old position with background color
+		screen->fillCircle(pos.x + width / 2, pos.y + width / 2, width / 2, color);					// draw at new position
+		//screen->fillRect(oldPos.x, oldPos.y, width, width, gamefield->getColor());
+		//screen->fillRect(pos.x,    pos.y,    width, width,    color);
 	}
 };
 
@@ -135,15 +138,31 @@ short int Player::getY() {
 	return pos.y;
 };
 
+short int Player::getWidth() {
+	return width;
+};
+
 
 void Player::addScore(short int value) {
-	if (score + value > 0) score += value;
+	scoreOld = score;
+	if (score + value >= 0) score += value;
 	else score = 0;
 };
 
 
-unsigned int Player::getScore() {
+short int Player::getScore() {
 	return score;
+};
+
+
+bool Player::scoreChanged() {
+	if (scoreOld != score) {
+		scoreOld = score;
+		return true;
+	} else {
+		scoreOld = score;
+		return false;
+	};
 };
 
 
@@ -154,25 +173,29 @@ unsigned int Player::getScore() {
 
 Enemy::Enemy(Gamefield *g, Adafruit_GFX *s)
 : gamefield(g), screen(s)
-{};
-
-
-void Enemy::init(short int x, short int y, unsigned short int col) {
-	pos.x = x;
-	pos.y = y;
-	oldPos.x = x + 1;
-	oldPos.y = y + 1;
-	color = col;
+{
+	randomPosition();
+	width=5;
 };
 
 
 void Enemy::setPosition(int x, int y) {
 	pos.x = x;
 	pos.y = y;
-	if (x < gamefield->getLeft() + radius) x = gamefield->getLeft() + radius;
-	if (y < gamefield->getTop() + radius) x = gamefield->getTop() + radius;
-	if (x > gamefield->getLeft() + gamefield->getWidth() - radius) x = gamefield->getLeft() + gamefield->getWidth() - radius;
-	if (x > gamefield->getTop() + gamefield->getHeight() - radius) x = gamefield->getTop() + gamefield->getHeight() - radius;
+	if (x < gamefield->getLeft()) x = gamefield->getLeft();
+	if (y < gamefield->getTop()) x = gamefield->getTop();
+	if (x + width > gamefield->getLeft() + gamefield->getWidth()) x = gamefield->getLeft() + gamefield->getWidth() - width;
+	if (x + width > gamefield->getTop() + gamefield->getHeight()) x = gamefield->getTop() + gamefield->getHeight() - width;
+};
+
+
+void Enemy::randomPosition() {
+	unsigned char dx, dy;
+	dx = random(3,5);
+	dy = random(1,3);
+	setDirection(dx, dy);
+	setPosition(random(gamefield->getLeft() + 2, gamefield->getLeft() + gamefield->getWidth()  - width - 2),
+			    random(gamefield->getTop() + 2, gamefield->getTop()  + gamefield->getHeight() - width - 2));
 };
 
 
@@ -187,8 +210,8 @@ void Enemy::setSpeed(unsigned char s) {
 };
 
 
-void Enemy::setRadius(short int r) {
-	radius = r;
+void Enemy::setWidth(short int w) {
+	width = w;
 };
 
 
@@ -197,10 +220,10 @@ void Enemy::move() {
 	oldPos.x = pos.x;
 	oldPos.y = pos.y;
 	// if movement would exceed game field borders then change direction
-	if ((dir.x == DIR_LEFT)  && ((pos.x - speed) < gamefield->getLeft()  + radius))                           dir.x = DIR_RIGHT;
-	if ((dir.y == DIR_UP)    && ((pos.y - speed) < gamefield->getTop()   + radius))                           dir.y = DIR_DOWN;
-	if ((dir.x == DIR_RIGHT) && ((pos.x + speed) > (gamefield->getLeft() + gamefield->getWidth()  - radius))) dir.x = DIR_LEFT;
-	if ((dir.y == DIR_DOWN)  && ((pos.y + speed) > (gamefield->getTop()  + gamefield->getHeight() - radius))) dir.y = DIR_UP;
+	if ((dir.x == DIR_LEFT)  && ((pos.x - speed) < gamefield->getLeft())) dir.x = DIR_RIGHT;
+	if ((dir.y == DIR_UP)    && ((pos.y - speed) < gamefield->getTop())) dir.y = DIR_DOWN;
+	if ((dir.x == DIR_RIGHT) && ((pos.x + speed) > (gamefield->getLeft() + gamefield->getWidth()  - width))) dir.x = DIR_LEFT;
+	if ((dir.y == DIR_DOWN)  && ((pos.y + speed) > (gamefield->getTop()  + gamefield->getHeight() - width))) dir.y = DIR_UP;
 	// move
 	if (dir.x == DIR_LEFT)  pos.x -= speed;
 	if (dir.y == DIR_UP)    pos.y -= speed;
@@ -211,10 +234,18 @@ void Enemy::move() {
 
 void Enemy::draw() {
 	if ((oldPos.x != pos.x) || (oldPos.y != pos.y)) {
-		screen->drawCircle(oldPos.x, oldPos.y, radius, gamefield->getColor());
-		screen->drawCircle(pos.x, pos.y, radius, color);
+		//screen->fillCircle(oldPos.x, oldPos.y, width * 2, gamefield->getColor());
+		//screen->fillCircle(pos.x, pos.y, width * 2, color);
+		screen->fillRect(oldPos.x, oldPos.y, width, width, gamefield->getColor());
+		if (friendly) screen->fillRect(pos.x, pos.y, width, width, COLOR_GREEN);
+		else screen->fillRect(pos.x, pos.y, width, width, COLOR_RED);
 	}
 };
+
+
+void Enemy::unDraw() {
+	screen->fillRect(pos.x, pos.y, width, width, gamefield->getColor());
+}
 
 
 short int Enemy::getX() {
@@ -227,8 +258,19 @@ short int Enemy::getY() {
 };
 
 
-short int Enemy::getRadius() {
-	return radius;
+short int Enemy::getWidth() {
+	return width;
+};
+
+
+bool Enemy::isFriendly() {
+	return friendly;
+};
+
+
+void Enemy::makeFriendly() {
+	friendly = true;
+	width *= 2;
 };
 
 
@@ -291,12 +333,12 @@ void Countdown::togglePause() {
 		pauseTimeStarted = millis();
 	} else {
 		paused = false;
-		pauseTime = 0;
 	}
 };
 
 
 void Countdown::update() {
+	timeLeftOld = timeLeft;
 	if (paused) pauseTime = (millis() - pauseTimeStarted) / 1000;
 	timeLeft = seconds + pauseTime - ((millis() - timeStarted) / 1000);
 	if (timeLeft < 0) timeLeft = 0;
@@ -311,6 +353,11 @@ bool Countdown::expired() {
 
 unsigned int Countdown::getTimeLeft() {
 	return timeLeft;
+};
+
+
+unsigned int Countdown::getTimeLeftOld() {
+	return timeLeftOld;
 };
 
 
@@ -334,16 +381,132 @@ void StatusBar::init(short int left, short int top, short int width, short int h
 
 
 void StatusBar::draw() {
+	char buff[6];
 
-	strcpy(caption, "was weiß ich\0");
-	char buff[10];
-	itoa(countdown->getTimeLeft(), buff, 10);
-	strcpy(caption, buff);
+	if (countdown->getTimeLeft() != countdown->getTimeLeftOld()) {
+		itoa(countdown->getTimeLeft(), buff, 10);
+		screen->setCursor(left + 50, top + height - 7);
+		if (countdown->getTimeLeft() > 10) screen->setTextColor(COLOR_GREEN);
+		else screen->setTextColor(COLOR_RED);
+		screen->fillRect(left + 50, top + 2, left + 80, top + height - 3, bkColor);
+		screen->print(buff);
+	};
 
-	screen->fillRect(left + 1, top + 1, left + width - 1, top + height - 1, bkColor);
-	screen->drawRect(left, top, left + width, top + height, borderColor);
-	centerText(screen, caption, left, top, width, height, borderColor, 2);
+	if (player->scoreChanged()) {
+		itoa(player->getScore() * 10, buff, 10);
+		screen->setCursor(left + width - 60, top + height - 7);
+		screen->setTextColor(COLOR_WHITE);
+		screen->fillRect(left + width - 60, top + 2, 30, height - 3, bkColor);
+		screen->print(buff);
+		//player->addScore(0);	//Update scoreOld, to not redraw the score continuously
+	};
 };
+
+
+void StatusBar::drawAll() {
+	char buff[6];
+
+	screen->fillRect(left + 1, top + 1, width - 1, height - 1, bkColor);
+	screen->drawRect(left, top, width, height, borderColor);
+
+	screen->setCursor(left + 5, top + height - 7);
+	screen->setTextColor(borderColor);
+	screen->print(F("Zeit:"));
+	itoa(countdown->getTimeLeft(), buff, 10);
+	screen->setCursor(left + 50, top + height - 7);
+	screen->setTextColor(COLOR_GREEN);
+	screen->print(buff);
+
+	screen->setCursor(left + width - 130, top + height - 7);
+	screen->setTextColor(borderColor);
+	screen->print(F("Punkte:"));
+	itoa(player->getScore(), buff, 10);
+	screen->setCursor(left + width - 60, top + height - 7);
+	screen->setTextColor(COLOR_WHITE);
+	screen->print(buff);
+};
+
+
+
+/////////////////////////////////////////////////
+// CLASS ENEMYFIELD
+/////////////////////////////////////////////////
+
+EnemyField::EnemyField(Player *p, Gamefield *g, Adafruit_GFX *s, unsigned short int nE)
+:player(p), gamefield(g), screen(s), numE(nE)
+{};
+
+
+EnemyField::~EnemyField() {};
+
+
+void EnemyField::draw() {
+	for (unsigned char i = 0; i < numEnemies(); i++) e.at(i).draw();
+};
+
+
+void EnemyField::move() {
+	for (unsigned char i = 0; i < numEnemies(); i++) e.at(i).move();
+};
+
+
+void EnemyField::addEnemy(bool f) {
+	Enemy newEnemy(gamefield, screen);
+	bool positionOk = true;
+
+	do {
+		positionOk = true;
+		newEnemy.randomPosition();
+		for (unsigned short int i = 0; i < numEnemies(); i++)
+			if ((newEnemy.getX() + newEnemy.getWidth() * 3) > (player->getX()) &&
+				(newEnemy.getY() + newEnemy.getWidth() * 3) > (player->getY()) &&
+				(newEnemy.getX() - newEnemy.getWidth() * 2) < (player->getX() + player->getWidth()) &&
+				(newEnemy.getY() - newEnemy.getWidth() * 2) < (player->getY() + player->getWidth())) positionOk = false;
+	} while (!positionOk);
+
+	if (f) {
+		newEnemy.makeFriendly();
+		newEnemy.setSpeed(2);
+	}
+
+	//newEnemy.setWidth(3);
+	//if (e->capacity() > e->size()+1)
+	e.push_back(newEnemy);
+};
+
+
+void EnemyField::removeEnemy(unsigned char n) {
+	if (n < e.size()) {
+		e.at(n).unDraw();
+		e.erase(e.begin()+n);
+	}
+};
+
+
+unsigned char EnemyField::numEnemies() {
+	return e.size();
+};
+
+void EnemyField::collisionTest() {
+	for (unsigned char i = 0; i < numEnemies(); ++i)
+		if ((player->getX() < (e.at(i).getX() + e.at(i).getWidth())) &&
+			(player->getY() < (e.at(i).getY() + e.at(i).getWidth())) &&
+			((player->getX() + player->getWidth()) > e.at(i).getX()) &&
+			((player->getY() + player->getWidth()) > e.at(i).getY()))
+		{
+			if (e.at(i).isFriendly()) {
+				player->addScore(1);
+				removeEnemy(i);
+				addEnemy(true);
+				addEnemy(false);
+			}
+			else {
+				player->addScore(-3);
+				removeEnemy(i);
+			};
+		};
+};
+
 
 
 
@@ -351,19 +514,19 @@ void StatusBar::draw() {
 // HELPER FUNCTIONS
 /////////////////////////////////////////////////
 
-unsigned short rgb(uint8_t r, uint8_t g, uint8_t b) {
-  return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3);
-};
 
 
-void centerText(Adafruit_GFX *scr, char txt[], short int l, short int t, short int w, short int h, unsigned short color, unsigned short size) {
+
+/*
+void centerText(Adafruit_GFX *scr, const char txt[], short int l, short int t, short int w, short int h, unsigned short color) {
 	int16_t  x1 = l, y1 = t;
 	uint16_t width, height;
 
 	scr->setTextColor(color);
-	scr->setTextSize(size);
 	scr->getTextBounds(txt, l, t, &x1, &y1, &width, &height);
-	scr->setCursor(l + (w / 2) - (width / 2), t + (h / 2) - (height / 2));
+	scr->setCursor(l + (width / 2) - (w / 2), t + height + (h / 2));
 	scr->print(txt);
 };
+*/
+
 

@@ -28,6 +28,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/Adafruit_BusIO}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/Wire/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/ArduinoSTL/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/EEPROM/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.1019007381" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -42,6 +43,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/Adafruit_BusIO}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/Wire/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/ArduinoSTL/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/EEPROM/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.2117734555" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -56,6 +58,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/Adafruit_BusIO}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/Wire/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/ArduinoSTL/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/gyrogame3/libraries/EEPROM/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.1062835047" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>

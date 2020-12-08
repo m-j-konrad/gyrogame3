@@ -45,17 +45,12 @@ gyrogame3.cpp.o: ..\gyrogame3.cpp \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/USBAPI.h \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Arduino.h \
  D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\variants\mega/pins_arduino.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/SD.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/SdFat.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/Sd2Card.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/Sd2PinMap.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/SdInfo.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/FatStructs.h \
- D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Print.h \
- C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/SdFatUtil.h \
  C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h \
+ D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Print.h \
  C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/gfxfont.h \
  C:\Users\mjk\Documents\Arduino\libraries\Waveshare_4_Inch_Tft_Touchscreen\src/Waveshare4InchTftShield.h \
+ ..\font_coming_soon_12pt.h ..\Highscore.h \
+ D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\libraries\EEPROM\src/EEPROM.h \
  ..\gyrogame.h
 
 D:\devel\Sloeber\arduinoPlugin\libraries\ArduinoSTL\1.1.0\src/ArduinoSTL.h:
@@ -150,26 +145,18 @@ D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino
 
 D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\variants\mega/pins_arduino.h:
 
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/SD.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/SdFat.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/Sd2Card.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/Sd2PinMap.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/SdInfo.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/FatStructs.h:
+C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h:
 
 D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\cores\arduino/Print.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\SD\src/utility/SdFatUtil.h:
-
-C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/Adafruit_GFX.h:
 
 C:\Users\mjk\Documents\Arduino\libraries\Adafruit_GFX_Library/gfxfont.h:
 
 C:\Users\mjk\Documents\Arduino\libraries\Waveshare_4_Inch_Tft_Touchscreen\src/Waveshare4InchTftShield.h:
+
+..\font_coming_soon_12pt.h:
+
+..\Highscore.h:
+
+D:\devel\Sloeber\arduinoPlugin\packages\arduino\hardware\avr\1.8.3\libraries\EEPROM\src/EEPROM.h:
 
 ..\gyrogame.h:
