@@ -8,14 +8,10 @@
 #include <string.h>
 
 
-/////////////////////////////////////////////////
-// HELPER FUNCTIONS
-/////////////////////////////////////////////////
-
+// convert RGB to RGGB for GFX lib
 constexpr inline unsigned short rgb(uint8_t r, uint8_t g, uint8_t b) {
   return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3);
 };
-
 
 
 constexpr unsigned char
@@ -23,13 +19,13 @@ constexpr unsigned char
 	GYROSCOPE_PIN_Y	= 14,
 	GYROSCOPE_PIN_Z	= 15;
 
-constexpr unsigned short int
-	COLOR_BLACK		= 0x0000,	// black for status bar background
-	COLOR_YELLOW	= rgb(255, 255, 0),	// yellow and...
-	COLOR_WHITE		= rgb(255, 255, 255),	// ...white for text output
-	COLOR_BLUE		= rgb(0, 0, 100),	// a dark blue for background
-	COLOR_GREEN		= rgb(0, 255, 0),	// intense green for player
-	COLOR_RED		= rgb(255, 0, 0);	// intense red for enemies
+constexpr unsigned short int	// some colors for easy access
+	COLOR_BLACK		= 0x0000,
+	COLOR_YELLOW	= rgb(255, 255, 0),
+	COLOR_WHITE		= rgb(255, 255, 255),
+	COLOR_BLUE		= rgb(0, 0, 100),
+	COLOR_GREEN		= rgb(0, 255, 0),
+	COLOR_RED		= rgb(255, 0, 0);
 
 constexpr unsigned char
 	DIR_NODIRECTION	= 55,		// directions for movement
@@ -39,6 +35,9 @@ constexpr unsigned char
 	DIR_RIGHT		= 4;
 
 
+// for now everything is connected with pointer, e.g. the enemy field uses pointers
+// to player, gamefield and so on. Everything has to be connected to the Adafruit GFX lib, for drawing.
+// It's a little confusing, next time I will do better, with more planning.
 class Gamefield;
 class Player;
 class Enemy;

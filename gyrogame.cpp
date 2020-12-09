@@ -26,17 +26,14 @@ short int Gamefield::getLeft() {
 };
 
 
-
 short int Gamefield::getTop() {
 	return top;
 };
 
 
-
 short int Gamefield::getWidth() {
 	return width;
 };
-
 
 
 short int Gamefield::getHeight() {
@@ -74,6 +71,7 @@ void Player::init(short int x, short int y, unsigned short col) {
 	color = col;
 	width = 10;
 };
+
 
 void Player::setWidth(short int w) {
 	width = w;
@@ -138,6 +136,7 @@ short int Player::getY() {
 	return pos.y;
 };
 
+
 short int Player::getWidth() {
 	return width;
 };
@@ -145,6 +144,7 @@ short int Player::getWidth() {
 
 void Player::addScore(short int value) {
 	scoreOld = score;
+	// the score will not be negative.
 	if (score + value >= 0) score += value;
 	else score = 0;
 };
@@ -174,18 +174,19 @@ bool Player::scoreChanged() {
 Enemy::Enemy(Gamefield *g, Adafruit_GFX *s)
 : gamefield(g), screen(s)
 {
-	randomPosition();
 	width=5;
+	randomPosition();
 };
 
 
 void Enemy::setPosition(int x, int y) {
 	pos.x = x;
 	pos.y = y;
-	if (x < gamefield->getLeft()) x = gamefield->getLeft();
-	if (y < gamefield->getTop()) x = gamefield->getTop();
-	if (x + width > gamefield->getLeft() + gamefield->getWidth()) x = gamefield->getLeft() + gamefield->getWidth() - width;
-	if (x + width > gamefield->getTop() + gamefield->getHeight()) x = gamefield->getTop() + gamefield->getHeight() - width;
+	// check if the position is inside the game field
+	if (x < gamefield->getLeft()) x = gamefield->getLeft() + 5;
+	if (y < gamefield->getTop())  x = gamefield->getTop()  + 5;
+	if (x + width > gamefield->getLeft() + gamefield->getWidth()) x = gamefield->getLeft() + gamefield->getWidth() - width - 5;
+	if (x + width > gamefield->getTop() + gamefield->getHeight()) x = gamefield->getTop() + gamefield->getHeight() - width - 5;
 };
 
 
@@ -194,8 +195,8 @@ void Enemy::randomPosition() {
 	dx = random(3,5);
 	dy = random(1,3);
 	setDirection(dx, dy);
-	setPosition(random(gamefield->getLeft() + 2, gamefield->getLeft() + gamefield->getWidth()  - width - 2),
-			    random(gamefield->getTop() + 2, gamefield->getTop()  + gamefield->getHeight() - width - 2));
+	setPosition(random(gamefield->getLeft() + 5, gamefield->getLeft() + gamefield->getWidth()  - width - 5),
+			    random(gamefield->getTop() + 5,  gamefield->getTop()  + gamefield->getHeight() - width - 5));
 };
 
 
@@ -234,6 +235,7 @@ void Enemy::move() {
 
 void Enemy::draw() {
 	if ((oldPos.x != pos.x) || (oldPos.y != pos.y)) {
+		// too many circles will be flickering because there's no frame buffer, so enemies are rectangles now!
 		//screen->fillCircle(oldPos.x, oldPos.y, width * 2, gamefield->getColor());
 		//screen->fillCircle(pos.x, pos.y, width * 2, color);
 		screen->fillRect(oldPos.x, oldPos.y, width, width, gamefield->getColor());
@@ -270,7 +272,7 @@ bool Enemy::isFriendly() {
 
 void Enemy::makeFriendly() {
 	friendly = true;
-	width *= 2;
+	width *= 2;	//bonuses should be a little bigger, easier to catch.
 };
 
 
@@ -352,6 +354,7 @@ void Countdown::start() {
 };
 
 
+// there's no pause implemented. Will not really work
 void Countdown::togglePause() {
 	if (!paused) {
 		paused = true;
@@ -362,6 +365,7 @@ void Countdown::togglePause() {
 };
 
 
+// pause won't really work for now
 void Countdown::update() {
 	timeLeftOld = timeLeft;
 	if (paused) pauseTime = (millis() - pauseTimeStarted) / 1000;
@@ -512,6 +516,7 @@ unsigned char EnemyField::numEnemies() {
 	return e.size();
 };
 
+
 void EnemyField::collisionTest() {
 	for (unsigned char i = 0; i < numEnemies(); ++i)
 		if ((player->getX() < (e.at(i).getX() + e.at(i).getWidth())) &&
@@ -531,27 +536,3 @@ void EnemyField::collisionTest() {
 			};
 		};
 };
-
-
-
-
-/////////////////////////////////////////////////
-// HELPER FUNCTIONS
-/////////////////////////////////////////////////
-
-
-
-
-/*
-void centerText(Adafruit_GFX *scr, const char txt[], short int l, short int t, short int w, short int h, unsigned short color) {
-	int16_t  x1 = l, y1 = t;
-	uint16_t width, height;
-
-	scr->setTextColor(color);
-	scr->getTextBounds(txt, l, t, &x1, &y1, &width, &height);
-	scr->setCursor(l + (width / 2) - (w / 2), t + height + (h / 2));
-	scr->print(txt);
-};
-*/
-
-

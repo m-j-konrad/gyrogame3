@@ -14,8 +14,8 @@ class Highscore {
 	public:
 		Highscore(Adafruit_GFX *s);
 		virtual ~Highscore();
-		void processHighscore(unsigned short int curScore);
-		void showHighscore();
+		void processHighscore(unsigned short int curScore);  // just give the current score
+		void showHighscore();	// draw the highscore
 		void writeEmptyTable();
 	private:
 		void readTable();
