@@ -5,16 +5,14 @@
 #include "font_coming_soon_12pt.h"
 #include "Highscore.h"
 #include "gyrogame.h"
-#define error(s) sd.errorHalt(F(s))  // store error strings in flash to save RAM
+
 Waveshare4InchTftShield Waveshield;
 Adafruit_GFX &tft = Waveshield;
 
-constexpr bool DEBUGGER_ON = false;
 
 unsigned int screenWidth	= 480;		// Change for other displays
 unsigned int screenHeight	= 320;
 
-bool SDCard = false;	// is SD card available?
 Gyroscope gyroscope;
 Gamefield gamefield(&tft);
 Player player(&gamefield, &tft);
@@ -22,6 +20,7 @@ EnemyField enemies(&player, &gamefield, &tft, 10);
 Countdown timer;		// timer to count down
 StatusBar statusBar(&player, &timer, &tft);	// status bar
 Highscore highscore(&tft);
+bool starWarsMode = false; // to enable "star wars mode"; lets the enemies move!
 
 void initDisplay();										// initialize TFT display (hardware, rotation)
 
@@ -32,35 +31,39 @@ void initDisplay();										// initialize TFT display (hardware, rotation)
 
 void setup()
 {
-	  randomSeed(analogRead(A1));	// randomize with pin 1
-	  initDisplay();				// initialize TFT display
+	randomSeed(analogRead(A1));	// randomize with pin 1
+	initDisplay();				// initialize TFT display
 
 
-	  tft.print(F("  GYROGAME ]I[\n\nBitte das Spiel gerade halten,\nich kalibriere...\n"));
-	  delay(1500);
-	  gyroscope.calibrate();		// calibrate gyroscope
-	  tft.print(F("fertig."));
-	  delay(100);
+	tft.print(F("  GYROGAME III\n\nBitte das Spiel gerade halten,\nich kalibriere...\n"));
+	delay(1500);
+	gyroscope.calibrate();		// calibrate gyroscope
+	tft.print(F("fertig.\n\n\n\n\n"));
+	delay(100);
+	tft.print(F("Bitte neige das Spiel um den Modus zu bestimmen:\n"));
+	tft.print(F("LINKS: normales Spiel\n"));
+	tft.print(F("RECHTS: Krieg-der-Sterne-Modus"));
 
-	  statusBar.init(0, 0, screenWidth, 24, COLOR_BLACK, COLOR_WHITE);
-	  gamefield.init(5, 26, screenWidth - 10, screenHeight - 28, COLOR_BLUE, COLOR_YELLOW);  // set up game field
-	  player.init(gamefield.getLeft() + (gamefield.getWidth() / 2), gamefield.getTop() + (gamefield.getHeight() / 2), COLOR_GREEN);  // set up player
-	  player.setWidth(20);
+	do {
+	} while (gyroscope.getDirectionX() == DIR_NODIRECTION);
+	if (gyroscope.getDirectionX() == DIR_LEFT) starWarsMode = false;
+	if (gyroscope.getDirectionX() == DIR_RIGHT) starWarsMode = true;
 
-	  timer.init(60);
+	statusBar.init(0, 0, screenWidth, 24, COLOR_BLACK, COLOR_WHITE);
+	gamefield.init(5, 26, screenWidth - 10, screenHeight - 28, COLOR_BLUE, COLOR_YELLOW);  // set up game field
+	player.init(gamefield.getLeft() + (gamefield.getWidth() / 2), gamefield.getTop() + (gamefield.getHeight() / 2), COLOR_GREEN);  // set up player
+	player.setWidth(20);
 
-	  // the very first time the game is running, the highscore table must be created.
-	  // TO DO: check for highscore first.
-	  //highscore.writeEmptyTable();
+	timer.init(60);
 
-	  enemies.addEnemy(true);
-	  enemies.addEnemy(true);
+	enemies.addEnemy(true);
+	enemies.addEnemy(true);
 
-	  tft.fillScreen(COLOR_BLACK);
-	  gamefield.draw();
-	  player.draw();
-	  timer.start();
-	  statusBar.drawAll();
+	tft.fillScreen(COLOR_BLACK);
+	gamefield.draw();
+	player.draw();
+	timer.start();
+	statusBar.drawAll();
 }
 
 
@@ -75,21 +78,13 @@ void loop()
 	player.setSpeed(gyroscope.getSpeed());
 
 	player.move();
-	//enemies.move();
+	if (starWarsMode == true) enemies.move();
 	enemies.draw();
 	player.draw();
 	statusBar.draw();
 
 	timer.update();
 	enemies.collisionTest();
-
-	if (DEBUGGER_ON) {
-		tft.fillRect(300,3,100,12,COLOR_BLACK);
-		tft.setCursor(300, 12);
-		tft.print(gyroscope.getSpeed().x);
-		tft.setCursor(340, 12);
-		tft.print(gyroscope.getSpeed().y);
-	}
 
 	delay(20); //The more to draw, the less to wait... should work with millis()
 

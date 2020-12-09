@@ -49,8 +49,8 @@ class EnemyField;
 
 
 struct PositionT {
-	short int x = 0;
-	short int y = 0;
+	short int x = 100;
+	short int y = 100;
 };
 
 struct DirectionT {
@@ -154,6 +154,8 @@ class Gyroscope {
 		void read();		// get state
 		void calibrate();
 		SpeedT getSpeed();
+		unsigned char getDirectionX();
+		unsigned char getDirectionY();
 	private:
 		int x = 0;			// current values
 		int y = 0;

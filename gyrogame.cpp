@@ -282,6 +282,7 @@ void Enemy::makeFriendly() {
 Gyroscope::Gyroscope() {};
 Gyroscope::~Gyroscope() {};
 
+
 void Gyroscope::read() {
 	x = analogRead(GYROSCOPE_PIN_X) - calibX;
 	y = analogRead(GYROSCOPE_PIN_Y) - calibY;
@@ -291,6 +292,7 @@ void Gyroscope::read() {
 	speed.y = -(y / 3);
 };
 
+
 void Gyroscope::calibrate() {
 	read();
 	calibX = x;
@@ -298,9 +300,32 @@ void Gyroscope::calibrate() {
 	calibZ = z;
 };
 
+
 SpeedT Gyroscope::getSpeed() {
 	return speed;
 }
+
+
+unsigned char Gyroscope::getDirectionX() {
+	read();
+	switch (speed.x) {
+		case -4: return DIR_LEFT;
+		case 4: return DIR_RIGHT;
+		case 0: return DIR_NODIRECTION;
+		default: return DIR_NODIRECTION;
+	}
+};
+
+
+unsigned char Gyroscope::getDirectionY() {
+	read();
+	switch (speed.y) {
+		case -4: return DIR_UP;
+		case 4: return DIR_DOWN;
+		case 0: return DIR_NODIRECTION;
+		default: return DIR_NODIRECTION;
+	}
+};
 
 
 
